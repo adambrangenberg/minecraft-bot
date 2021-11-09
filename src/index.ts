@@ -1,10 +1,11 @@
 import mineflayer from 'mineflayer';
 import minecraftdata from 'minecraft-data';
 import 'dotenv/config';
+import prismarinerecipe from 'prismarine-recipe';
 
 const testserver = {
-    host: "TigerbyteDev.aternos.me",
-    port: 25565,
+    host: "butterflyfish.aternos.host",
+    port: 25948,
     version: "1.8.9",
 };
 
@@ -19,14 +20,19 @@ const bot = mineflayer.createBot({
   auth: "mojang"
 });
 
-// MC Data is used to get the properties of blocks
-const mcData = minecraftdata(bot.version);
-
-console.log("Bot ist online! :D");
-
 // mineflayer-collectblock is used to find and collect blocks
 bot.loadPlugin(require('mineflayer-collectblock').plugin);
 
+// MC Data is used to get the properties of blocks
+const mcData = minecraftdata(bot.version);
+
+// Prismarine Recipe is used to get the recipe of a block
+// @ts-ignore
+const Recipe = prismarinerecipe(bot.version).Recipe;
+
+bot.on("spawn", () => {
+    console.log("Bot ist online und alle Bibliotheken sind geladen! :D");
+});
 function collectBlock(blockID: number) {
     // Find all nearby blocks of a specific type
     const foundBlocks = bot.findBlock({
@@ -44,6 +50,24 @@ function collectBlock(blockID: number) {
                 collectBlock(blockID);
         });
     }
+}
+
+function craftItem(recipe: any, amount: number) {
+    // Getting the position of the crafting table
+    const craftingTable = bot.findBlock({
+        matching: mcData.itemsByName["crafting_table"].id,
+        maxDistance: 64
+    });
+
+    if (!craftingTable) {
+        bot.chat("Any Craftingtable was found!");
+        return;
+    }
+
+    // Get the recipe of the item
+    bot.craft(recipe, amount, craftingTable).then(() => {
+        bot.chat("Crafting finished!");
+    });
 }
 
 bot.on("chat", (username: string, message: string) => {
@@ -67,7 +91,30 @@ bot.on("chat", (username: string, message: string) => {
             collectBlock(block.id);
             bot.chat(`Collecting minecraft:${block.name}`);
             break;
+        case "craft":
+            // Get the item to craft
+            const item = mcData.itemsByName[args[0].toLowerCase()];
+            if (!item) {
+                bot.chat("Please specify an item!");
+                return;
+            }
+
+            // Get the crafting recipe of the item
+            const recipe = Recipe.find(item.id)[0];
+            if (!recipe) {
+                bot.chat("This item can't be crafted!");
+                return;
+            }
+
+            // Get the amount of items to craft, default is 64
+            const amount = parseInt(args[1]) ?? 64;
+
+            // Craft the item
+            craftItem(recipe, amount);
+            bot.chat(`Crafting ${amount}x minecraft:${item.name}`);
+            break;
         default:
+            // If the command is not found, send a message
             bot.chat("This isn't an valid command!");
             break;
     }
