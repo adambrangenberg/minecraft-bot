@@ -1,0 +1,24 @@
+{
+  "name": "minecraft-bots",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node ./build/index.js",
+    "build": "tsc",
+    "test": "ts-node ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "TigerbyteDev",
+  "license": "MIT",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "dotenv": "^10.0.0",
+    "eslint": "^8.2.0",
+    "mineflayer": "^3.11.2",
+    "mineflayer-collectblock": "^1.3.4",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
