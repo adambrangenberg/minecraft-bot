@@ -1,28 +1,30 @@
 export const config = {
-    SERVER_IP: 'griefergames.net',
-    SERVER_PORT: 25565,
-    VERSION: '1.8.9',
-    NORMAL_COOLDOWN: 3050,
-    SLOW_COOLDOWN: 4050,
-    PORTAL_COOLDOWN: 12000,
-    MSG_REGEXP: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] (.+)$/,
-    PLOTCHAT_REGEXP: /^\[Plot\-Chat\]\[(.+)\] (\w+) \u2503 (\u007E?\u0021?\w{1,16}) \: (.+)$/,
-    CHATMODE_ALERT_REGEXP: /^\[Chat\] Der Chat wurde von (\w+) \u2503 (\u007E?\u0021?\w{1,16}) (.+)\.$/,
-    SLOWCHAT_ALERT_REGEXP: /^\[GrieferGames\] Du kannst nur jede 10 Sekunden schreiben\.$/,
-    COMMANDSPAM_ALERT_REGEXP: /^Bitte unterlasse das Spammen von Commands!$/,
-    PAY_REGXP: /^(.+) \u2503 (\u007E?\u0021?\w{1,16}) hat dir \$(\S+) gegeben\.$/,
-    MONEYDROP_REGEXP: /^\$(\S+) wurde zu deinem Konto hinzugefügt\.$/,
-    REDSTONE_REGEXP: /^- Redstone (?:ist wieder )?(\w+)\!?$/,
-    ITEMCLEAR_REGEXP: /^\[GrieferGames\] Warnung! Die auf dem Boden liegenden Items werden in (\w{2}) Sekunden entfernt\!$/,
-    MOBREMOVER_REGEXP: /^\[MobRemover\] Achtung! In (\w{1}) Minuten werden alle Tiere gelöscht\.$/,
-    TPA_REGEXP: /^([A-Za-z\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob er sich zu dir teleportieren darf.$/,
-    TPAHERE_REGEXP: /^([A-Za-z\\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob du dich zu ihm teleportierst.$/,
+    serverIP: 'griefergames.net',
+    serverPort: 25565,
+    version: '1.8.9',
+    defaultCooldown: 3050,
+    slowCooldown: 4050,
+    portalCooldown: 12000,
+    msgRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] (.+)$/,
+    plotChatRegex: /^\[Plot\-Chat\]\[(.+)\] (\w+) \u2503 (\u007E?\u0021?\w{1,16}) \: (.+)$/,
+    chatmodeAlertRegex: /^\[Chat\] Der Chat wurde von (\w+) \u2503 (\u007E?\u0021?\w{1,16}) (.+)\.$/,
+    slowChatAlertRegex: /^\[GrieferGames\] Du kannst nur jede 10 Sekunden schreiben\.$/,
+    commandSpamAlertRegex: /^Bitte unterlasse das Spammen von Commands!$/,
+    payRegex: /^(.+) \u2503 (\u007E?\u0021?\w{1,16}) hat dir \$(\S+) gegeben\.$/,
+    moneyDropRegex: /^\$(\S+) wurde zu deinem Konto hinzugefügt\.$/,
+    redstoneRegex: /^- Redstone (?:ist wieder )?(\w+)\!?$/,
+    itemClearRegex: /^\[GrieferGames\] Warnung! Die auf dem Boden liegenden Items werden in (\w{2}) Sekunden entfernt\!$/,
+    mobRemoverRegex: /^\[MobRemover\] Achtung! In (\w{1}) Minuten werden alle Tiere gelöscht\.$/,
+    tpaRegex: /^([A-Za-z\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob er sich zu dir teleportieren darf.$/,
+    tpaHereRegex: /^([A-Za-z\\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob du dich zu ihm teleportierst.$/,
+    stopCollectRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopCollect/,
+    stopCraftingRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopCrafting/,
 
     // Coded expressions
     // These only match if tested against coded messages.
     // §f, §l, §r, etc.
-    CODED_PAY_REGEXP: /^(.+)\u2503 (.+) §ahat dir \$(\S+) gegeben\.$/,
+    codedPayRegex: /^(.+)\u2503 (.+) §ahat dir \$(\S+) gegeben\.$/,
 
-    ADMINS: [""],
-    USERS: [""]
+    admins: [""],
+    users: [""]
 };
