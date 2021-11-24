@@ -6,9 +6,8 @@ const { GoalNear } = require ('mineflayer-pathfinder').goals;
 const Movements = require('mineflayer-pathfinder').Movements
 import { config } from './config';
 import { readdirSync } from "fs";
-import { sendMSG } from './functions';
+import { sendMSG, sendWebHook } from './functions';
 
-let loopCollect = true;
 let commands = new Map();
 
 config.users = process.env.USERS?.split(',') ?? [];
@@ -51,6 +50,7 @@ bot.chatAddPattern(config.tpaHereRegex, 'tpaHere');
 bot.chatAddPattern(config.moneyDropRegex, 'moneyDrop');
 bot.chatAddPattern(config.stopCollectRegex, 'stopCollect');
 bot.chatAddPattern(config.stopCraftingRegex, 'stopCrafting');
+bot.chatAddPattern(config.stopFollowRegex, 'stopFollow');
 
 function loadCommands() {
     const read = readdirSync('./src/commands');
@@ -114,41 +114,14 @@ bot._client.on('packet', (data, metadata) => {
 // @ts-ignore
 bot.on("tpa", (rank: string, username: string) => {
     bot.chat("/tpaccept")
-    console.log( `${rank} | ${username} wurde zu mir teleportiert!`);
+    sendWebHook(username, `**${rank} | ${username}** wurde zu mir teleportiert!`, "other");
 });
 
 // @ts-ignore
 bot.on("tpaHere", (rank: string, username: string) => {
     bot.chat("/tpaccept")
-    console.log( `Ich wurde zu ${rank} | ${username} teleportiert!`);
+    sendWebHook(username, `Ich wurde zu **${rank} | ${username}** teleportiert!`, "other");
 });
-
-function clearInv(username: string) {
-    const person = bot.nearestEntity();
-    if (person) {
-        bot.lookAt(person.position);
-    }
-    return new Promise<void>(async resolve => {
-        const inv = bot.inventory.items();
-        console.log(inv);
-        for (let i = 0; i < inv.length; i++) {
-            try {
-                const item = inv[i];
-                if (item.name.includes("axe") || item.name.includes("sword") || item.name.includes("shovel") || item.name.includes("hoe") || item.name.includes("pickaxe") || item.name.includes("helmet") || item.name.includes("chestplate") || item.name.includes("leggings") || item.name.includes("boots")) {
-                    sendMSG(username, "I can't drop Tools or Armor, otherwise I would be kicked! Please kill me.");
-                    continue;
-                }
-                // bot.toss(item.type, null, item.count);
-                bot.tossStack(item);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        sendMSG(username, "Inventory cleared!")
-        resolve();
-    });
-}
 
 bot.on("chat", (username, message) =>{
     if (username === "Switcher") {
@@ -156,12 +129,18 @@ bot.on("chat", (username, message) =>{
         bot.pathfinder.setGoal(null);
     }
     if (username === bot.username) return;
-    console.log(`${username}: ${message}`);
+    sendWebHook(username, message, "chat");
 });
 
 // @ts-ignore
-bot.on("msg", (rank: string, username: string, message: string) => {
-    console.log(`${rank} | ${username} >> ${message}`);
+bot.on("moneyDrop", (username: string, amount: number) => {
+    sendWebHook("MoneyDrop", `Es gab einen Moneydrop von ${amount}!`, "moneyDrops");
+});
+
+// @ts-ignore
+bot.on("msg", async (rank: string, username: string, message: string) => {
+    sendWebHook(username, message, "msg");
+    // console.log(`${rank} | ${username} >> ${message}`);
     if (!whitelist.includes(username) || !message.startsWith('!')) return;
 
     // Get the command and arguments
@@ -180,48 +159,6 @@ bot.on("msg", (rank: string, username: string, message: string) => {
         return sendMSG(username, "Unknown Command! Use !help for a list of commands");
     }
 });
-
-// @ts-ignore
-bot.on("chat", (username: string, message: string) => {
-    return;
-    console.log(`${username} | ${message}`);
-    if (!whitelist.includes(username)) return;
-    if (!message.startsWith('!')) return;
-
-    // Get the command and arguments --> choose between the commands
-    const args = message.slice('!'.length).trim().split(/ +/g);
-    const command = args.shift()?.toLowerCase();
-
-    switch (command) {
-        case 'clearinv':
-            clearInv(username);
-            break;
-
-        case 'runcommand':
-            if (!config.admins.includes(username)) return;
-            if (args.length === 0) {
-                sendMSG(username, "Please specify an command!");
-                return;
-            }
-            bot.chat(`${args.join(' ')}`);
-            break;
-
-        case 'pay':
-            if (!config.admins.includes(username)) return;
-            if (args.length < 2) {
-                sendMSG(username, "Please specify a player and an amount!");
-                return;
-            }
-            bot.chat (`/pay ${args[0]} ${args[1]}`);
-            sendMSG(username, `Payed ${args[1]} to ${args[0]}`);
-            break;
-        default:
-            // If the command is not found, send a message
-            sendMSG(username, "This isn't an valid command!");
-            console.log(bot.heldItem)
-            break;
-    }
-})
 
 export const initStuff = {
     mcData,

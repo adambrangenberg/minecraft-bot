@@ -4,7 +4,7 @@ import { sendMSG } from "../functions";
 
 export const command: Command = {
     name: "craft",
-    usage: "!craft <Items> <Anzahl> <Resultierende Anzahl>",
+    usage: "!craft <Items> <Resultierende Anzahl> <Anzahl>",
     args: 2,
 
     run: function (rank, username, args, bot) {
@@ -34,11 +34,11 @@ export const command: Command = {
         }
 
         // Get the amount of items to craft
-        const amount = parseInt(args[1]);
+        const amount = parseInt(args[2]);
 
         if (amount === 0) {
-            if (!args[2]) return sendMSG(username, "Please specify an resulting amount per process!");
-            const resultAmount = parseInt(args[2]);
+            if (!args[1]) return sendMSG(username, "Please specify an resulting amount per process!");
+            const resultAmount = parseInt(args[1]);
             if (resultAmount < 1) return sendMSG(username, "Please specify a valid amount!");
 
             let stopCrafting = true;
@@ -67,9 +67,14 @@ export const command: Command = {
 
             sendMSG(username, `Started crafting minecraft:${item.name} until stop Command!`);
         } else {
+            if (!args[1]) return sendMSG(username, "Please specify an resulting amount per process!");
+            const resultAmount = parseInt(args[1]);
+            if (resultAmount < 1) return sendMSG(username, "Please specify a valid amount!");
+
             sendMSG(username, `Crafting minecraft:${item.name} for ${amount} times!`)
             // Craft the item
             bot.craft(recipe, amount, craftingTable).then(() => {
+                bot.toss(item.id, null, resultAmount);
                 sendMSG(username, `Crafted minecraft:${item.name} for ${amount} times!`);
             });
         }
