@@ -52,8 +52,8 @@ export const command: Command = {
             function craftItem() {
                 // Craft the item
                 // @ts-ignore
-                bot.craft(recipe, 1, craftingTable).then(() => {
-                    bot.toss(item.id, null, resultAmount);
+                bot.craft(recipe, 1, craftingTable).then(async () => {
+                    await bot.toss(item.id, null, resultAmount);
 
                     if (stopCrafting) {
                         sendMSG(username, "Crafting stopped!");
@@ -73,8 +73,8 @@ export const command: Command = {
 
             sendMSG(username, `Crafting minecraft:${item.name} for ${amount} times!`)
             // Craft the item
-            bot.craft(recipe, amount, craftingTable).then(() => {
-                bot.toss(item.id, null, resultAmount);
+            bot.craft(recipe, amount, craftingTable).then(async () => {
+                await bot.toss(item.id, null, resultAmount);
                 sendMSG(username, `Crafted minecraft:${item.name} for ${amount} times!`);
             });
         }

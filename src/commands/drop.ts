@@ -7,7 +7,7 @@ export const command: Command = {
     usage: "!drop <Item> <Anzahl>",
     args: 2,
 
-    run: function (rank, username, args, bot) {
+    run: async function (rank, username, args, bot) {
         // Get the item to drop
         const item = initStuff.mcData.itemsByName[args[0].toLowerCase()];
         if (!item) {
@@ -15,10 +15,15 @@ export const command: Command = {
             return;
         }
 
+        const target = bot.players[username] ? bot.players[username].entity : null
+        if (!target) return sendMSG(username, "I can't see you! D:");
+        const position = target?.position;
+        await bot.lookAt(position, true);
+
         // Get the amount to drop
         const amount = parseInt(args[1]);
 
-        bot.toss(item.id, null, amount, () => {
+        await  bot.toss(item.id, null, amount, () => {
             sendMSG(username, `Dropped ${amount} of ${item.name}`);
         });
 

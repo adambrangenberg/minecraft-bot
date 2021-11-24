@@ -1,17 +1,17 @@
 import { Command } from '../interfaces'
-import { sendMSG, getBlock } from "../functions";
+import { sendMSG, getBlock, findBlocks } from "../functions";
 import { initStuff } from '../index';
 
 export const command: Command = {
-    name: "collect",
-    usage: "!collect <Blockname>",
+    name: "dig",
+    usage: "!dig <Blockname>",
     args: 1,
 
     run: async function (rank, username, args, bot) {
         let loopCollect: boolean = true;
 
         // @ts-ignore
-        bot.once("stopCollect", () => {
+        bot.once("stopDig", () => {
             if (!initStuff.whitelist.includes(username)) return;
             loopCollect = false
             sendMSG(username, "Stopping...")
@@ -20,24 +20,21 @@ export const command: Command = {
         // Get the block to collect
         const block = await getBlock(args[0], username);
 
-        collectBlock();
+        await collectBlock();
         sendMSG(username, `Collecting minecraft:${block.name}`);
 
-        function collectBlock() {
-            const foundBlocks = bot.findBlock({
-                matching: block.id,
-                maxDistance: 64
-            });
+        async function collectBlock() {
+            const foundBlock = await findBlocks(block.id, bot);
 
             // Collect the blocks if exist any
-            if (foundBlocks) {
+            if (foundBlock) {
                 // @ts-ignore
-                bot.collectBlock.collect(foundBlocks, error => {
-                    if (error)
-                        console.log(error);
-                    else if (loopCollect) {
+                await bot.dig(foundBlock, true, () => {
+                    if (loopCollect) {
                         collectBlock();
-                    } else sendMSG(username, "Stopped!");
+                    } else {
+                        sendMSG(username, "Stopped!");
+                    }
                 });
             }
         }

@@ -6,9 +6,10 @@ const { GoalNear } = require ('mineflayer-pathfinder').goals;
 const Movements = require('mineflayer-pathfinder').Movements
 import { config } from './config';
 import { readdirSync } from "fs";
-import { sendMSG, sendWebHook } from './functions';
+import { sendMSG, sendWebHook, solveAfkChallenge } from './functions';
 
 let commands = new Map();
+let currentCB = 'Offline';
 
 config.users = process.env.USERS?.split(',') ?? [];
 config.admins = process.env.ADMINS?.split(',') ?? [];
@@ -16,7 +17,7 @@ const whitelist: string[] = config.users.concat(config.admins);
 
 // Creating a bot
 // @ts-ignore
-const bot = createBot({
+let bot = createBot({
   host: config.serverIP,
   username: process.env.MAIL,
   password: process.env.PASSWORD,
@@ -50,7 +51,7 @@ bot.chatAddPattern(config.tpaHereRegex, 'tpaHere');
 bot.chatAddPattern(config.moneyDropRegex, 'moneyDrop');
 bot.chatAddPattern(config.stopCollectRegex, 'stopCollect');
 bot.chatAddPattern(config.stopCraftingRegex, 'stopCrafting');
-bot.chatAddPattern(config.stopFollowRegex, 'stopFollow');
+bot.chatAddPattern(config.stopDigRegex, 'stopDig');
 
 function loadCommands() {
     const read = readdirSync('./src/commands');
@@ -83,6 +84,40 @@ bot.once("spawn", () => {
     }, config.portalCooldown);
 });
 
+
+bot.on("kicked", async (reason) => {
+    reason = JSON.parse(reason);
+    await sendWebHook("Kick", reason.toString(), "others");
+
+    switch(reason.toString()) {
+        case "Der Server wird heruntergefahren.":
+
+            setTimeout(() => {
+                // @ts-ignore
+                bot = createBot({
+                    host: config.serverIP,
+                    username: process.env.MAIL,
+                    password: process.env.PASSWORD,
+                    version: config.version,
+                    auth: "mojang"
+                });
+            }, 3600000); // 60min
+            break;
+        case "Du bist schon zu oft online!":
+            sendWebHook("Bot", "Bot wurde heruntergefahren...", "others");
+            setTimeout(() => process.exit(), 1000);
+            break;
+        default:
+            // @ts-ignore
+            bot = createBot({
+                host: config.serverIP,
+                username: process.env.MAIL,
+                password: process.env.PASSWORD,
+                version: config.version,
+                auth: "mojang"
+            });    }
+})
+
 bot._client.on('packet', (data, metadata) => {
     if(metadata.name == 'custom_payload' && data.channel == 'mysterymod:mm') {
         const dataBuffer = data.data;
@@ -109,40 +144,57 @@ bot._client.on('packet', (data, metadata) => {
             });
         }
     }
+
+    // Emit scoreboard server updates.
+    if (metadata.name === 'scoreboard_team' && data.name === 'server_value') {
+        const serverName = data.prefix.replace(/\u00A7[0-9A-FK-OR]/gi, '');
+        if(serverName != undefined && serverName.trim() != '' && !serverName.includes('Laden')) {
+            currentCB = serverName;
+        }
+    }
+});
+
+bot.on('windowOpen', (window) => {
+    let title = JSON.parse(window.title);
+
+    if (window.type == 'minecraft:container' && title && title.includes('§cAFK?')) {
+        solveAfkChallenge(bot, window).catch(() => console.error('Failed solving AFK challenge.'));
+    }
+
 });
 
 // @ts-ignore
-bot.on("tpa", (rank: string, username: string) => {
+bot.on("tpa", async (rank: string, username: string) => {
     bot.chat("/tpaccept")
-    sendWebHook(username, `**${rank} | ${username}** wurde zu mir teleportiert!`, "other");
+    await sendWebHook(username, `**${rank} | ${username}** wurde zu mir teleportiert!`, "other");
 });
 
 // @ts-ignore
-bot.on("tpaHere", (rank: string, username: string) => {
+bot.on("tpaHere", async (rank: string, username: string) => {
     bot.chat("/tpaccept")
-    sendWebHook(username, `Ich wurde zu **${rank} | ${username}** teleportiert!`, "other");
+     await sendWebHook(username, `Ich wurde zu **${rank} | ${username}** teleportiert!`, "other");
 });
 
-bot.on("chat", (username, message) =>{
+bot.on("chat", async (username, message) =>{
     if (username === "Switcher") {
         // @ts-ignore
         bot.pathfinder.setGoal(null);
     }
     if (username === bot.username) return;
-    sendWebHook(username, message, "chat");
+    await sendWebHook(username, message, "chat");
 });
 
 // @ts-ignore
-bot.on("moneyDrop", (username: string, amount: number) => {
-    sendWebHook("MoneyDrop", `Es gab einen Moneydrop von ${amount}!`, "moneyDrops");
+bot.on("moneyDrop", async (username: string, amount: number) => {
+    await sendWebHook("MoneyDrop", `Es gab einen Moneydrop von ${amount}!`, "moneyDrops");
 });
 
 // @ts-ignore
 bot.on("msg", async (rank: string, username: string, message: string) => {
-    sendWebHook(username, message, "msg");
+    await sendWebHook(username, message, "msg");
     // console.log(`${rank} | ${username} >> ${message}`);
     if (!whitelist.includes(username) || !message.startsWith('!')) return;
-
+    if (message.includes("stop")) return;
     // Get the command and arguments
     const args = message.slice('!'.length).trim().split(/ +/g);
     const cmd = args.shift()?.toLowerCase();
@@ -165,5 +217,6 @@ export const initStuff = {
     defaultMove,
     bot,
     whitelist,
-    Recipe
+    Recipe,
+    currentCB
 }
