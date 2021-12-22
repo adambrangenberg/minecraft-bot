@@ -1,3 +1,3 @@
-## Minecraft Bots
-### Description
-You can automate with that bot tasks in Minecraft. To do that, you need to fill in all the 
+## GrieferGames Bot 
+### Beschreibung
+Mit diesem Bot kannst du Prozesse automatisieren, aktuell nur für CB Nature ausgelegt. Für andere CBs einfach die Koordinaten für den Portalraum ändern :)
