@@ -1,22 +1,47 @@
-import {initStuff} from "./index";
+import { initStuff } from "./index";
 import mcapi from "minecraft-lookup";
+import * as pathfinder from 'mineflayer-pathfinder';
 // @ts-ignore
-import {Webhook} from 'simple-discord-webhooks';
-import {Bot} from 'mineflayer';
+import { Webhook } from 'simple-discord-webhooks';
+import { Bot } from 'mineflayer';
+import { config } from "./config";
 
 export function sendMSG(username: string, message: string) {
     initStuff.bot.chat(`/msg ${username} ${message}`);
 }
 
+// The Function to join on GrieferGames.net CB Nature
+export async function serverJoin(bot: Bot) {
+    bot.chat("/portal");
+
+    // Coords of the Portal
+    const p = {
+        x: 317.5,
+        y: 67,
+        z: 321,
+    };
+
+    // Moving to the portal
+    // @ts-ignore
+    bot.pathfinder.setMovements(initStuff.defaultMove)
+    setTimeout(async () => {
+        // @ts-ignore
+        await bot.pathfinder.setGoal(new pathfinder.goals.GoalNear(p.x, p.y, p.z, 1));
+    }, config.portalCooldown);
+}
+
 export async function sendWebHook(username: string, message: string, channel: string) {
     let hookID: any = null;
+
+    // Get the type of channel
     switch (channel) {
         case 'moneyDrops':
             // @ts-ignore
             hookID = process.env.MONEYDROPS_WEBHOOK;
             break;
         case 'chat':
-            if (["Download", "GrieferGames", "Switcher", "SHOP", "MysteryMod", "News", "Switcher", "Freunde", "Usage"].includes(username)) {
+            // Whitelist DON'T REMOVE !!!!! RATE LIMITS !!!!!
+            if (["Download", "GrieferGames", "Switcher", "SHOP", "MysteryMod", "News", "Switcher", "Freunde", "Usage", "Multiplikator", "Booster"].includes(username)) {
                 break;
             }
             if (message.includes("┃") || message.includes("mir]")) {
@@ -40,9 +65,10 @@ export async function sendWebHook(username: string, message: string, channel: st
     }
     if (!hookID) return;
     try {
+        // Getting the properties out of Minecraft API
         const head = await mcapi.head(username, 2000);
         const hook = new Webhook(hookID, `${username}`, head.helmavatar);
-        hook.send(message);
+        hook.send(`\`${message}\``);
     } catch (error) {
         console.log(error);
     }
@@ -53,7 +79,9 @@ export async function solveAfkChallenge(bot: Bot, window: any) {
     const slot = items[0].slot;
 
     try {
+        // Well... Click the Slot
         await waitForClickSlot(bot, slot);
+        // And wait for the server to close the windows
         await waitForCloseWindow(bot);
     } catch (e) {
         throw e;

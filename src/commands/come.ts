@@ -7,11 +7,14 @@ export const command: Command = {
     usage: "!come",
     args: 0,
     run: async function (rank, username, args, bot) {
+        // Find the player
         const target = bot.players[username] ? bot.players[username].entity : null
         if (!target) return sendMSG(username, "I can't see you! D:");
         const position = target?.position;
 
         sendMSG(username, "Coming...");
+
+        // and walk to it
         // @ts-ignore
         await bot.pathfinder.setGoal(new GoalNear(position.x, position.y, position.z, 1));
     }

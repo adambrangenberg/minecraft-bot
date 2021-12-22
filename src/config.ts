@@ -1,10 +1,13 @@
 export const config = {
+    // Some setting to be compatible with GrieferGames
     serverIP: 'griefergames.net',
     serverPort: 25565,
     version: '1.8.9',
     defaultCooldown: 3050,
     slowCooldown: 4050,
     portalCooldown: 12000,
+
+    // RegEX used to add chat patterns
     msgRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] (.+)$/,
     plotChatRegex: /^\[Plot\-Chat\]\[(.+)\] (\w+) \u2503 (\u007E?\u0021?\w{1,16}) \: (.+)$/,
     chatmodeAlertRegex: /^\[Chat\] Der Chat wurde von (\w+) \u2503 (\u007E?\u0021?\w{1,16}) (.+)\.$/,
@@ -21,12 +24,11 @@ export const config = {
     stopCraftingRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopCrafting/,
     stopDigRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopDig/,
 
-
     // Coded expressions
     // These only match if tested against coded messages.
-    // §f, §l, §r, etc.
     codedPayRegex: /^(.+)\u2503 (.+) §ahat dir \$(\S+) gegeben\.$/,
 
-    admins: [""],
-    users: [""]
+    // Just to extract them here from the .env
+    users: [""],
+    admins: [""]
 };

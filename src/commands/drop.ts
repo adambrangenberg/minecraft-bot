@@ -4,7 +4,7 @@ import {initStuff} from "../index";
 
 export const command: Command = {
     name: "drop",
-    usage: "!drop <Item> <Anzahl>",
+    usage: "!drop <Item> <Amount>",
     args: 2,
 
     run: async function (rank, username, args, bot) {
@@ -15,20 +15,19 @@ export const command: Command = {
             return;
         }
 
+        // Find the target and look at it
         const target = bot.players[username] ? bot.players[username].entity : null
         if (!target) return sendMSG(username, "I can't see you! D:");
         const position = target?.position;
         await bot.lookAt(position, true);
 
-        // Get the amount to drop
+        // Get the amount to drop and drop the item
         const amount = parseInt(args[1]);
-
-        await  bot.toss(item.id, null, amount, () => {
+        await bot.toss(item.id, null, amount, () => {
             sendMSG(username, `Dropped ${amount} of ${item.name}`);
         });
 
         // @ts-ignore
         bot.emit("stopCollect");
-        // sendMSG(username, "Stopping...")
     }
 }

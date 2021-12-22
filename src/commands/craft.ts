@@ -4,7 +4,7 @@ import { sendMSG } from "../functions";
 
 export const command: Command = {
     name: "craft",
-    usage: "!craft <Items> <Resultierende Anzahl> <Anzahl>",
+    usage: "!craft <Item> <Resulting Amount> <Amount of Items to craft>",
     args: 2,
 
     run: function (rank, username, args, bot) {
@@ -36,7 +36,8 @@ export const command: Command = {
         // Get the amount of items to craft
         const amount = parseInt(args[2]);
 
-        if (amount === 0) {
+        if (!amount) {
+            // Parsing the parameters
             if (!args[1]) return sendMSG(username, "Please specify an resulting amount per process!");
             const resultAmount = parseInt(args[1]);
             if (resultAmount < 1) return sendMSG(username, "Please specify a valid amount!");
@@ -54,7 +55,7 @@ export const command: Command = {
                 // @ts-ignore
                 bot.craft(recipe, 1, craftingTable).then(async () => {
                     await bot.toss(item.id, null, resultAmount);
-
+                    // Loop the process
                     if (stopCrafting) {
                         sendMSG(username, "Crafting stopped!");
                         return;
@@ -67,14 +68,17 @@ export const command: Command = {
 
             sendMSG(username, `Started crafting minecraft:${item.name} until stop Command!`);
         } else {
+            // Parsing the parameters
             if (!args[1]) return sendMSG(username, "Please specify an resulting amount per process!");
             const resultAmount = parseInt(args[1]);
             if (resultAmount < 1) return sendMSG(username, "Please specify a valid amount!");
+            const repeats = Math.round(resultAmount/amount);
 
             sendMSG(username, `Crafting minecraft:${item.name} for ${amount} times!`)
+
             // Craft the item
-            bot.craft(recipe, amount, craftingTable).then(async () => {
-                await bot.toss(item.id, null, resultAmount);
+            bot.craft(recipe, repeats, craftingTable).then(async () => {
+                await bot.toss(item.id, null, amount);
                 sendMSG(username, `Crafted minecraft:${item.name} for ${amount} times!`);
             });
         }

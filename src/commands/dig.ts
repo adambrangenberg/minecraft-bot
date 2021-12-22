@@ -8,6 +8,7 @@ export const command: Command = {
     args: 1,
 
     run: async function (rank, username, args, bot) {
+        // other to collect that doesn't includes pathfinding --> the bot stands still
         let loopCollect: boolean = true;
 
         // @ts-ignore
@@ -24,18 +25,27 @@ export const command: Command = {
         sendMSG(username, `Collecting minecraft:${block.name}`);
 
         async function collectBlock() {
+            // Find the block
             const foundBlock = await findBlocks(block.id, bot);
 
-            // Collect the blocks if exist any
+            // Collect the block if it exist
             if (foundBlock) {
                 // @ts-ignore
                 await bot.dig(foundBlock, true, () => {
+                    // Loop the process
                     if (loopCollect) {
                         collectBlock();
                     } else {
                         sendMSG(username, "Stopped!");
                     }
                 });
+            } else {
+                // If all blocks near are mined after 3 seconds --> stop digging
+                setTimeout(async () => {
+                    const foundBlock = await findBlocks(block.id, bot);
+                    // @ts-ignore
+                    if (!foundBlock) return bot.emit("stopDig");
+                }, 3000);
             }
         }
     }
