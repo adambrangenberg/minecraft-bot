@@ -20,9 +20,6 @@ export const config = {
     mobRemoverRegex: /^\[MobRemover\] Achtung! In (\w{1}) Minuten werden alle Tiere gelöscht\.$/,
     tpaRegex: /^([A-Za-z\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob er sich zu dir teleportieren darf.$/,
     tpaHereRegex: /^([A-Za-z\\-]+\+?) \u2503 (\u007E?\u0021?\w{1,16}) fragt, ob du dich zu ihm teleportierst.$/,
-    stopCollectRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopCollect/,
-    stopCraftingRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopCrafting/,
-    stopDigRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] !stopDig/,
 
     // Coded expressions
     // These only match if tested against coded messages.

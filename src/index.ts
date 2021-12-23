@@ -51,11 +51,6 @@ bot.chatAddPattern(config.tpaRegex, 'tpa');
 bot.chatAddPattern(config.tpaHereRegex, 'tpaHere');
 bot.chatAddPattern(config.moneyDropRegex, 'moneyDrop');
 
-// Adding Commands to stop specific processes
-bot.chatAddPattern(config.stopCollectRegex, 'stopCollect');
-bot.chatAddPattern(config.stopCraftingRegex, 'stopCrafting');
-bot.chatAddPattern(config.stopDigRegex, 'stopDig');
-
 // Load all the commands
 const read = readdirSync('./src/commands'); // Before compiling change src to build
 for (const file of read) {
@@ -195,7 +190,6 @@ bot.on("msg", async (rank: string, username: string, message: string) => {
     await sendWebHook(username, message, "msg");
 
     if (!whitelist.includes(username) || !message.startsWith('!')) return;
-    if (message.includes("stop")) return;
 
     // Get the command and arguments
     const args = message.slice('!'.length).trim().split(/ +/g);
