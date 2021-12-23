@@ -5,7 +5,7 @@
 - [GrieferGames.net](https://github.com/TigerbyteDev/minecraft-bot/tree/griefergames) - Works on GrieferGames.net
 
 ### Description
-At the Moment the Bot have can Log Event on the Server via Discord Webhook and run a few processes via /tell.
+At the Moment the Bot can Log Events on the Server via Discord Webhook and run a few processes via /tell.
 You can whitelist players to be able to run a command.
 
 List of Commands:
