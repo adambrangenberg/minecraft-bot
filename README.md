@@ -8,15 +8,15 @@ At the Moment the Bot have can Log Event on the Server via Discord Webhook and r
 You can whitelist players to be able to run a command.
 
 List of Commands:
-- !collect <blockname>
+- !collect 
 - !stopCollect
 - !come
-- !craft <Item> <Resulting Amount> <Amount of Items to craft>
+- !craft 
 - !stopCrafting
-- !dig <blockname>
+- !dig 
 - !stopDig
-- !drop <Item> <Amount>
-- !sudo <Command>
+- !drop 
+- !sudo 
 
 ### Requirements
 - NodeJS and NPM
