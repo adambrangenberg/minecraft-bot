@@ -1,5 +1,5 @@
 export const config = {
-    serverIP: 'uwu.uwu',
+    serverIP: 'example.ip',
     serverPort: 25565, // Leave that as it is if you don't know what you are doing
     version: '1.8.9',
 
