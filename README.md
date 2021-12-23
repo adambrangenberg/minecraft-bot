@@ -1,4 +1,5 @@
-## Minecraft Bots
+# Minecraft Bots
+## Vanilla 1.8.9 Branch
 ### Branches
 - [1.8.9 Vanilla](https://github.com/TigerbyteDev/minecraft-bot/tree/1.8.9-Vanilla) - Should work on most 1.8.9 Servers
 - [GrieferGames.net](https://github.com/TigerbyteDev/minecraft-bot/tree/griefergames) - Works on GrieferGames.net
