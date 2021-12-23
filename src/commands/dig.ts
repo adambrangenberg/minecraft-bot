@@ -7,9 +7,12 @@ export const command: Command = {
     usage: "!dig <Blockname>",
     args: 1,
 
-    run: async function (rank, username, args, bot) {
+    run: async function (username, args, bot) {
         // other to collect that doesn't includes pathfinding --> the bot stands still
         let loopCollect: boolean = true;
+
+        // @ts-ignore
+        bot.emit("stopDig");
 
         // @ts-ignore
         bot.once("stopDig", () => {

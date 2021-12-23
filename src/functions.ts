@@ -1,33 +1,11 @@
 import { initStuff } from "./index";
 import mcapi from "minecraft-lookup";
-import * as pathfinder from 'mineflayer-pathfinder';
 // @ts-ignore
 import { Webhook } from 'simple-discord-webhooks';
 import { Bot } from 'mineflayer';
-import { config } from "./config";
 
 export function sendMSG(username: string, message: string) {
-    initStuff.bot.chat(`/msg ${username} ${message}`);
-}
-
-// The Function to join on GrieferGames.net CB Nature
-export async function serverJoin(bot: Bot) {
-    bot.chat("/portal");
-
-    // Coords of the Portal
-    const p = {
-        x: 317.5,
-        y: 67,
-        z: 321,
-    };
-
-    // Moving to the portal
-    // @ts-ignore
-    bot.pathfinder.setMovements(initStuff.defaultMove)
-    setTimeout(async () => {
-        // @ts-ignore
-        await bot.pathfinder.setGoal(new pathfinder.goals.GoalNear(p.x, p.y, p.z, 1));
-    }, config.portalCooldown);
+    initStuff.bot.chat(`/tell ${username} ${message}`);
 }
 
 export async function sendWebHook(username: string, message: string, channel: string) {
@@ -40,13 +18,6 @@ export async function sendWebHook(username: string, message: string, channel: st
             hookID = process.env.MONEYDROPS_WEBHOOK;
             break;
         case 'chat':
-            // Whitelist DON'T REMOVE !!!!! RATE LIMITS !!!!!
-            if (["Download", "GrieferGames", "Switcher", "SHOP", "MysteryMod", "News", "Switcher", "Freunde", "Usage", "Multiplikator", "Booster"].includes(username)) {
-                break;
-            }
-            if (message.includes("┃") || message.includes("mir]")) {
-                break;
-            }
             // @ts-ignore
             hookID = process.env.CHAT_WEBHOOK;
             break;
@@ -72,36 +43,6 @@ export async function sendWebHook(username: string, message: string, channel: st
     } catch (error) {
         console.log(error);
     }
-}
-
-export async function solveAfkChallenge(bot: Bot, window: any) {
-    const items: any = window.slots;
-    const slot = items[0].slot;
-
-    try {
-        // Well... Click the Slot
-        await waitForClickSlot(bot, slot);
-        // And wait for the server to close the windows
-        await waitForCloseWindow(bot);
-    } catch (e) {
-        throw e;
-    }
-
-    return true;
-}
-
-export function waitForClickSlot(bot: Bot, slot: any) {
-    return new Promise(async (resolve) => {
-        await bot.clickWindow(slot, 0, 0, resolve);
-    });
-}
-
-export function waitForCloseWindow(bot: Bot) {
-    return new Promise<void>((resolve) => {
-        bot.once('windowClose', () => {
-            resolve();
-        });
-    })
 }
 
 export function getBlock(blockname: string, username: string) {

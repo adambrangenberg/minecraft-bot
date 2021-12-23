@@ -7,7 +7,7 @@ export const command: Command = {
     adminsOnly: true,
     args: 1,
 
-    run: function (rank, username, args, bot) {
+    run: function (username, args, bot) {
         // Let's the bot run an command
         const command = args.join(" ");
         bot.chat(`/${command}`);

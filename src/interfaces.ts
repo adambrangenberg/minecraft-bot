@@ -6,5 +6,5 @@ export interface Command {
     args: number;
     adminsOnly?: boolean;
     disabled?: boolean;
-    run(rank: string, username: string, args: string[], bot: Bot): any;
+    run(username: string, args: string[], bot: Bot): any;
 }

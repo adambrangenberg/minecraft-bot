@@ -7,7 +7,10 @@ export const command: Command = {
     usage: "!craft <Item> <Resulting Amount> <Amount of Items to craft>",
     args: 2,
 
-    run: function (rank, username, args, bot) {
+    run: function (username, args, bot) {
+        // @ts-ignore
+        bot.emit("stopCrafting");
+
         // Get the item to craft
         const item = initStuff.mcData.itemsByName[args[0].toLowerCase()];
         if (!item) {
