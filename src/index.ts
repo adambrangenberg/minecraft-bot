@@ -8,7 +8,6 @@ import { readdirSync } from "fs";
 import { sendMSG, sendWebHook } from './functions';
 
 let commands = new Map();
-let currentCB = 'Offline';
 
 // Getting the whitelisted Players out of .env and save them in an array
 config.users = process.env.USERS?.split(',') ?? [];
@@ -110,8 +109,7 @@ export const initStuff = {
     defaultMove,
     bot,
     whitelist,
-    Recipe,
-    currentCB
+    Recipe
 }
 
 
