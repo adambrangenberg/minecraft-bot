@@ -68,6 +68,6 @@
   },
   "exclude": [
     "node_modules",
-    "src/commandlayout.ts",
+    "src/commandlayout.ts.example"
   ]
 }
