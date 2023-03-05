@@ -16,7 +16,8 @@ export const command: Command = {
         }
 
         // Get the crafting recipe of the item
-        const recipe = initStuff.Recipe.find(item.id)[0];
+        const recipe = initStuff.Recipe.find(item.id, item.variations?.find(i => i.displayName === args[0].toLowerCase())?.metadata ?? null)[0];
+        console.log(item.variations?.find(i => i.displayName === args[0].toLowerCase())?.metadata)
         if (!recipe) {
             sendMSG(username, "This item can't be crafted!");
             return;

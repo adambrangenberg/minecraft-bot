@@ -8,7 +8,7 @@ export const command: Command = {
     args: 1,
 
     run: async function (rank, username, args, bot) {
-        // other to collect that doesn't includes pathfinding --> the bot stands still
+        // other to collect that doesn't include pathfinding --> the bot stands still
         let loopCollect: boolean = true;
 
         // @ts-ignore
@@ -22,13 +22,13 @@ export const command: Command = {
         const block = await getBlock(args[0], username);
 
         await collectBlock();
-        sendMSG(username, `Collecting minecraft:${block.name}`);
+        sendMSG(username, `Collecting ${block.name}`);
 
         async function collectBlock() {
             // Find the block
             const foundBlock = await findBlocks(block.id, bot);
 
-            // Collect the block if it exist
+            // Collect the block if it exists
             if (foundBlock) {
                 // @ts-ignore
                 await bot.dig(foundBlock, true, () => {

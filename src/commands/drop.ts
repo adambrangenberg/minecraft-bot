@@ -23,7 +23,7 @@ export const command: Command = {
 
         // Get the amount to drop and drop the item
         const amount = parseInt(args[1]);
-        await bot.toss(item.id, null, amount, () => {
+        bot.toss(item.id, null, amount).then(() => {
             sendMSG(username, `Dropped ${amount} of ${item.name}`);
         });
 

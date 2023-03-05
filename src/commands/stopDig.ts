@@ -1,5 +1,4 @@
 import { Command } from '../interfaces'
-import { sendMSG } from "../functions";
 
 export const command: Command = {
     name: "stopDig",

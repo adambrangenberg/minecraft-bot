@@ -35,7 +35,7 @@ export const command: Command = {
                 maxDistance: 64
             });
 
-            // Collect the block if it exist
+            // Collect the block if it exists
             if (foundBlocks) {
                 // @ts-ignore
                 bot.collectBlock.collect(foundBlocks, error => {

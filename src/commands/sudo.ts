@@ -8,7 +8,7 @@ export const command: Command = {
     args: 1,
 
     run: function (rank, username, args, bot) {
-        // Let's the bot run an command
+        // Lets the bot run a command
         const command = args.join(" ");
         bot.chat(`/${command}`);
         sendMSG(username, `I've ran /${command}`);
