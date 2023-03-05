@@ -122,3 +122,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Botconfig
+src/config.ts
+
