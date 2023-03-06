@@ -43,22 +43,22 @@ export async function serverJoin(bot: Bot) {
   };
 
   // Moving to the portal
-  // @ts-ignore
   bot.pathfinder.setMovements(initStuff.defaultMove);
   setTimeout(async () => {
-    bot.once("spawn", () => startWebView(bot))
-    // @ts-ignore
+    bot.once("spawn", () => {
+      startWebView(bot)
+      sendWebHook("Bot", "Bot wurde gestartet!", "other")
+    })
     await bot.pathfinder.setGoal(new pathfinder.goals.GoalNear(p.x, p.y, p.z, 1));
   }, config.portalCooldown);
 }
 
-export async function sendWebHook(username: string, message: string, channel: string) {
+export async function sendWebHook(username: string, message: string, channel: "moneyDrops" | "chat" | "msg" | "other") {
   let hookID: any = null;
 
   // Get the type of channel
   switch (channel) {
     case "moneyDrops":
-      // @ts-ignore
       hookID = process.env.MONEYDROPS_WEBHOOK;
       break;
     case "chat":
@@ -75,19 +75,15 @@ export async function sendWebHook(username: string, message: string, channel: st
         break;
       }
 
-      // @ts-ignore
       hookID = process.env.CHAT_WEBHOOK;
       break;
     case "msg":
-      // @ts-ignore
       hookID = process.env.MSG_WEBHOOK;
       break;
     case "other":
-      // @ts-ignore
       hookID = process.env.OTHERS_WEBHOOK;
       break;
     default:
-      // @ts-ignore
       hookID = null;
       break;
   }
