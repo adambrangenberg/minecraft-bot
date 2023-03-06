@@ -1,20 +1,21 @@
 import { Command } from '../interfaces'
 import { sendMSG } from "../functions";
-const { Goal } = require ('mineflayer-pathfinder').goals;
+const { GoalNear } = require ('mineflayer-pathfinder').goals;
 
 export const command: Command = {
     name: "come",
     usage: "!come",
     args: 0,
-    run: function (rank, username, args, bot) {
+    run: async function (rank, username, args, bot) {
         // Find the player
         const target = bot.players[username] ? bot.players[username].entity : null
         if (!target) return sendMSG(username, "I can't see you! D:");
-        const position = target?.position;
+        const {x, y, z} = target?.position;
 
-        sendMSG(username, "Coming...");
+        sendMSG(username, `Coming to ${x}x ${y}y ${z}z`);
 
         // and walk to it
-        bot.pathfinder.setGoal(new Goal(position.x, position.y, position.z));
+        await bot.pathfinder.setGoal(new GoalNear(x, y, z, 0 ));
+        sendMSG(username, "Arrived.")
     }
 }
