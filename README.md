@@ -1,17 +1,20 @@
-# Minecraft Bots
-## GrieferGames.net Branch
-### Branches
-- [1.8.9 Vanilla](https://github.com/TigerbyteDev/minecraft-bot/tree/1.8.9-Vanilla) - Should work on most 1.8.9 Servers
-- [GrieferGames.net](https://github.com/TigerbyteDev/minecraft-bot/tree/griefergames) - Works on GrieferGames.net
+# Minecraft Bot 1.8.9
 
-### Description
+---
+**!!!DISCLAIMER!!!** \
+This kind of botting on GrieferGames.net isn't allowed. 
+This project is just proof on concept and **should never be used** in production! 
+In case the GrieferGames.net Administration wants this project to be taken down I'm willing to do so. \
 **!!!DISCLAIMER!!!**
-Botting isn't allowed on that server. Use the Bot at your own risk. You could get banned and/or cleared **!!!DISCLAIMER!!!**
+---
 
-At the Moment the Bot can Log Events on the Server via Discord Webhook and run a few processes via /tell.
-You can whitelist players to be able to run a command.
+## Description
+This bot is able to perform many tasks which are listed below. 
+It also logs most thing in a Discord channel via WebHooks even though this isn't mature at the moment. 
+It also has a web interface which allows you to lurk on the bot in either third person (default) with spectator mode or first person.
 
 List of Commands:
+
 - !collect
 - !stopCollect
 - !come
@@ -22,10 +25,17 @@ List of Commands:
 - !drop
 - !sudo
 - !pay
+- !follow
+- !stopFollow
 
-### Requirements
+There is a known issue that some stop commands don't get recognized.
+
+## Requirements
 - NodeJS and NPM
-- All the package in package.json
+- All the packages in package.json
 - A Minecraft Java Edition Account
 
-A Wiki on how to use the Bot is coming soon...
+## Licensing
+
+This code is distributed under the MIT License. Check the dependencies for more information
+about other potential licenses.
