@@ -72,11 +72,10 @@ bot.once("spawn", async () => {
 
 bot.on("kicked", async (reason) => {
   // Will be fixed soon, at the moment it's just ending the bot
-  await sendWebHook("Bot", "Bot wurde heruntergefahren...", "others");
-  setTimeout(() => process.exit(), 1000);
+  sendWebHook("Bot", "Bot wurde heruntergefahren...", "other").then(() => process.exit());
 
   reason = JSON.parse(reason);
-  await sendWebHook("Kick", reason.toString(), "others");
+  await sendWebHook("Kick", reason.toString(), "other");
 
   switch (reason.toString()) {
     case "Der Server wird heruntergefahren.":
@@ -94,7 +93,7 @@ bot.on("kicked", async (reason) => {
       break;
 
     case "Du bist schon zu oft online!":
-      await sendWebHook("Bot", "Bot wurde heruntergefahren...", "others");
+      await sendWebHook("Bot", "Bot wurde heruntergefahren...", "other");
       // setTimeout(() => process.exit(), 1000);
       break;
 
@@ -105,7 +104,7 @@ bot.on("kicked", async (reason) => {
         username: process.env.MAIL,
         password: process.env.PASSWORD,
         version: config.version,
-        auth: "mojang"
+        auth: "microsoft"
       });
       await serverJoin(bot);
   }
@@ -207,6 +206,8 @@ bot.on("msg", async (rank: string, username: string, message: string) => {
     return sendMSG(username, "Unknown Command!");
   }
 });
+
+bot.on("error", console.error);
 
 // exporting all the variables from the index file
 export const initStuff = {
