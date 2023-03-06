@@ -11,8 +11,8 @@ let commands = new Map();
 let currentCB = "Offline";
 
 // Getting the whitelisted Players out of .env
-config.users = process.env.USERS?.split(",") ?? [];
-config.admins = process.env.ADMINS?.split(",") ?? [];
+config.users = [...config.users, ...(process.env.USERS?.split(",") ?? [])];
+config.admins = [...config.admins, ...(process.env.ADMINS?.split(",") ?? [])];
 const whitelist: string[] = config.users.concat(config.admins);
 
 // Creating a bot
@@ -26,7 +26,7 @@ let bot = createBot({
 
 // mineflayer-collectblock is used to find and collect blocks
 bot.loadPlugin(require("mineflayer-collectblock").plugin);
-bot.loadPlugin(require("mineflayer-auto-eat"));
+bot.loadPlugin(require("mineflayer-auto-eat").plugin);
 bot.loadPlugin(require("mineflayer-pathfinder").pathfinder);
 
 // MC Data is used to get the properties of blocks
@@ -50,13 +50,12 @@ bot.chatAddPattern(config.tpaHereRegex, "tpaHere");
 bot.chatAddPattern(config.moneyDropRegex, "moneyDrop");
 
 // Load all the commands
-const read = readdirSync("./dist/commands"); // Before compiling change src to build
-for (const file of read) {
+const read = readdirSync("./build/commands"); // Before compiling change src to build
+for (let file of read) {
   const { command } = require(`./commands/${file}`);
   commands.set(command.name, command);
   console.log(`Loaded ${command.name}`);
 }
-
 
 bot.once("spawn", async () => {
   console.log("Bot ist online! :D");
