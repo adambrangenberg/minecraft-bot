@@ -4,7 +4,29 @@ import * as pathfinder from "mineflayer-pathfinder";
 import { Webhook } from "simple-discord-webhooks";
 import { Bot } from "mineflayer";
 import { config } from "./config";
+// @ts-ignore
+import {mineflayer} from "prismarine-viewer";
 
+export function startWebView(bot: Bot, port = 3000) {
+  console.log("Starting Web GUI...")
+  mineflayer(bot, {
+    port,
+    firstPerson: false,
+    viewDistance: 6
+  })
+
+  // Draw the path followed by the bot
+  const path = [bot.entity.position.clone()]
+  bot.on('move', () => {
+    if (path[path.length - 1].distanceTo(bot.entity.position) > 1) {
+      path.push(bot.entity.position.clone())
+      // @ts-ignore
+      bot.viewer.drawLine('path', path)
+    }
+  })
+  console.log("WebGUI gestartet, zugänglich auf http://localhost:" + port)
+
+}
 export function sendMSG(username: string, message: string) {
   initStuff.bot.chat(`/msg ${username} ${message}`);
 }
@@ -24,6 +46,7 @@ export async function serverJoin(bot: Bot) {
   // @ts-ignore
   bot.pathfinder.setMovements(initStuff.defaultMove);
   setTimeout(async () => {
+    bot.once("spawn", () => startWebView(bot))
     // @ts-ignore
     await bot.pathfinder.setGoal(new pathfinder.goals.GoalNear(p.x, p.y, p.z, 1));
   }, config.portalCooldown);
@@ -40,12 +63,18 @@ export async function sendWebHook(username: string, message: string, channel: st
       break;
     case "chat":
       // Whitelist DON'T REMOVE !!!!! RATE LIMITS !!!!!
-      if (["Download", "GrieferGames", "Switcher", "SHOP", "MysteryMod", "News", "Switcher", "Freunde", "Usage", "Multiplikator", "Booster"].includes(username)) {
+      if (["Download", "GrieferGames", "Switcher", "SHOP", "MysteryMod", "News", "Switcher", "Freunde", "Usage", "Multiplikator", "Booster", "CaseOpening"].includes(username)) {
         break;
       }
-      if (message.includes("┃") || message.includes("mir]")) {
+      if (message.includes("mir]")) {
         break;
       }
+
+      if (username === "Streamer") {
+        hookID= process.env.OTHERS_WEBHOOK;
+        break;
+      }
+
       // @ts-ignore
       hookID = process.env.CHAT_WEBHOOK;
       break;
