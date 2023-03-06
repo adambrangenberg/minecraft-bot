@@ -4,7 +4,7 @@ import { sendMSG } from "../functions";
 
 export const command: Command = {
     name: "craft",
-    usage: "!craft <Item> <Resulting Amount> <Amount of Items to craft>",
+    usage: "!craft <Item> <Resulting Amount> <Amount to craft>",
     args: 2,
 
     run: function (rank, username, args, bot) {
