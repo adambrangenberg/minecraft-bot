@@ -54,11 +54,12 @@ const read = readdirSync("./build/commands"); // Before compiling change src to 
 for (let file of read) {
   const { command } = require(`./commands/${file}`);
   commands.set(command.name, command);
+
   console.log(`Loaded ${command.name}`);
 }
 
 bot.once("spawn", async () => {
-  console.log("Bot ist online! :D");
+  console.log(`Bot ist online als ${bot.username}! :D`);
   // @ts-ignore
   bot.autoEat.options.priority = "20";
   // @ts-ignore
@@ -188,7 +189,7 @@ bot.on("msg", async (rank: string, username: string, message: string) => {
 
   // Get the command and arguments
   const args = message.slice("!".length).trim().split(/ +/g);
-  const cmd = args.shift()?.toLowerCase();
+  const cmd = args.shift();
 
   // IF the command is valid --> run checks
   // IF check are successful --> run command
@@ -203,7 +204,7 @@ bot.on("msg", async (rank: string, username: string, message: string) => {
 
     command.run(rank, username, args, bot);
   } else {
-    return sendMSG(username, "Unknown Command!");
+    return sendMSG(username, `Unknown Command ${cmd}! Did you spell (casing important!) it correctly?`);
   }
 });
 
