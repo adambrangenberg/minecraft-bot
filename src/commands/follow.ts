@@ -8,7 +8,7 @@ export const command: Command = {
   usage: "!follow <Person>",
   args: 0,
 
-  run: async function(rank, username, args, bot) {
+  async run(rank, username, args, bot) {
     let follow = true;
     // @ts-ignore
     bot.once("stopFollow", () => {

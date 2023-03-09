@@ -4,7 +4,7 @@ export const command: Command = {
     name: "stopCrafting",
     usage: "!stopCrafting",
     args: 0,
-    run: function (username, args, bot) {
+    run(username, args, bot) {
         // @ts-ignore
         bot.emit("stopCrafting");
     }

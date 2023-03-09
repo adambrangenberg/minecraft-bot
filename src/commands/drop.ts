@@ -7,7 +7,7 @@ export const command: Command = {
     usage: "!drop <Item> <Amount>",
     args: 2,
 
-    run: async function (rank, username, args, bot) {
+    async run(rank, username, args, bot) {
         // Get the item to drop
         const item = initStuff.mcData.itemsByName[args[0].toLowerCase()];
         if (!item) {

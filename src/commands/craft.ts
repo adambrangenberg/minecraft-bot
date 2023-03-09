@@ -7,7 +7,7 @@ export const command: Command = {
     usage: "!craft <Item> <Resulting Amount> <Amount to craft>",
     args: 2,
 
-    run: function (rank, username, args, bot) {
+    run(rank, username, args, bot) {
         // Get the item to craft
         const item = initStuff.mcData.itemsByName[args[0].toLowerCase()];
         if (!item) {

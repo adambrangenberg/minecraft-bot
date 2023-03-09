@@ -5,7 +5,7 @@ export const command: Command = {
   usage: "!stopFollow",
   args: 0,
 
-  run: function (username, args, bot) {
+  run(username, args, bot) {
     // @ts-ignore
     bot.emit("stopFollow");
   }

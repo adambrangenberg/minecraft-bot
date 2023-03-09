@@ -7,7 +7,7 @@ export const command: Command = {
     usage: "!collect <Blockname>",
     args: 1,
 
-    run: async function (rank, username, args, bot) {
+    async run(rank, username, args, bot) {
         // Other do dig that includes pathfinding too
         // @ts-ignore
         bot.emit("stopCollect");

@@ -5,7 +5,7 @@ export const command: Command = {
     name: "name",
     usage: "nutzung",
     args: 0,
-    run: function (rank, username, args, bot) {
+    run(rank, username, args, bot) {
         // sendMSG(username, "Stopping...")
     }
 }

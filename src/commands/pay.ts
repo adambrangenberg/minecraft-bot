@@ -7,7 +7,7 @@ export const command: Command = {
     adminsOnly: true,
     args: 1,
 
-    run: function (rank, username, args, bot) {
+    run(rank, username, args, bot) {
         // Lets the bot pay a specific amount to a player
         const target = args[1] || username;
         bot.chat(`/pay ${target} ${args[0]}`);

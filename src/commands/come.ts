@@ -6,7 +6,7 @@ export const command: Command = {
     name: "come",
     usage: "!come",
     args: 0,
-    run: async function (rank, username, args, bot) {
+    async run(rank, username, args, bot) {
         // Find the player
         const target = bot.players[username] ? bot.players[username].entity : null
         if (!target) return sendMSG(username, "I can't see you! D:");
