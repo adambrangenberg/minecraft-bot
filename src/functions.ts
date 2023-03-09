@@ -6,6 +6,7 @@ import { Bot } from "mineflayer";
 import { config } from "./config";
 // @ts-ignore
 import {mineflayer} from "prismarine-viewer";
+import { MSGData } from "./interfaces";
 
 export function startWebView(bot: Bot, port = 3000) {
   console.log("Starting Web GUI...")
@@ -47,14 +48,17 @@ export async function serverJoin(bot: Bot) {
   setTimeout(async () => {
     bot.once("spawn", () => {
       startWebView(bot)
-      sendWebHook("Bot", "Bot wurde gestartet!", "other")
+      sendWebHook({username: "Bot", message: "Bot wurde gestartet!"}, "other")
     })
     await bot.pathfinder.setGoal(new pathfinder.goals.GoalNear(p.x, p.y, p.z, 1));
   }, config.portalCooldown);
 }
 
-export async function sendWebHook(username: string, message: string, channel: "moneyDrops" | "chat" | "msg" | "other") {
+
+
+export async function sendWebHook({ message, username, clan, rank }: MSGData, channel: "moneyDrops" | "chat" | "msg" | "other") {
   let hookID: any = null;
+  let complete = false;
 
   // Get the type of channel
   switch (channel) {
@@ -75,7 +79,9 @@ export async function sendWebHook(username: string, message: string, channel: "m
         break;
       }
 
+
       hookID = process.env.CHAT_WEBHOOK;
+      complete = true;
       break;
     case "msg":
       hookID = process.env.MSG_WEBHOOK;
@@ -90,8 +96,10 @@ export async function sendWebHook(username: string, message: string, channel: "m
   if (!hookID) return;
   try {
     // Getting the properties out of Minecraft API
+    const hasRank = rank === undefined ? username : `${rank} ┃ ${username}`;
+    const hasClan = clan === undefined ? hasRank : `[${clan}] ` + hasRank
     const head = await mcapi.head(username, 2000);
-    const hook = new Webhook(hookID, `${username}`, head.helmavatar);
+    const hook = new Webhook(hookID, `${hasClan}`, head.helmavatar);
     await hook.send(`\`${message}\``);
   } catch (error) {
     console.log(error);

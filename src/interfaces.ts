@@ -9,3 +9,10 @@ export interface Command {
 
   run(rank: string, username: string, args: string[], bot: Bot): any;
 }
+
+export interface MSGData {
+  message: string;
+  username: string;
+  clan?: string;
+  rank?: string;
+}

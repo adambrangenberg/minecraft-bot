@@ -72,16 +72,17 @@ bot.once("spawn", async () => {
 });
 
 // @ts-ignore
-bot.on("playerChat", (clan: string, rank: string , username: string, message: string) => {
-
+bot.on("playerChat", async (_, clan: string, rank: string , username: string, message: string) => {
+  await sendWebHook({ message, username, clan, rank}, "chat")
+  console.log(_, clan, rank, username, message)
 })
 
 bot.on("kicked", async (reason) => {
   // Will be fixed soon, at the moment it's just ending the bot
-  sendWebHook("Bot", "Bot wurde heruntergefahren...", "other").then(() => process.exit());
+  sendWebHook({username: "Bot", message: "Bot wurde heruntergefahren..."}, "other").then(() => process.exit());
 
   reason = JSON.parse(reason);
-  await sendWebHook("Kick", reason.toString(), "other");
+  await sendWebHook({ username: "Kick", message: reason.toString() }, "other");
 
   switch (reason.toString()) {
     case "Der Server wird heruntergefahren.":
@@ -99,7 +100,7 @@ bot.on("kicked", async (reason) => {
       break;
 
     case "Du bist schon zu oft online!":
-      await sendWebHook("Bot", "Bot wurde heruntergefahren...", "other");
+      await sendWebHook({ username: "Bot", message: "Bot wurde heruntergefahren..." }, "other");
       // setTimeout(() => process.exit(), 1000);
       break;
 
@@ -162,13 +163,13 @@ bot.on("windowOpen", (window) => {
 // @ts-ignore
 bot.on("tpa", async (rank: string, username: string) => {
   bot.chat("/tpaccept");
-  await sendWebHook(username, `${rank} | ${username} wurde zu mir teleportiert!`, "other");
+  await sendWebHook({ username: bot.username, message: `${rank} | ${username} wurde zu mir teleportiert!`}, "other");
 });
 
 // @ts-ignore
 bot.on("tpaHere", async (rank: string, username: string) => {
   bot.chat("/tpaccept");
-  await sendWebHook(username, `Ich wurde zu ${rank} | ${username} teleportiert!`, "other");
+  await sendWebHook({ username: bot.username, message: `Ich wurde zu ${rank} | ${username} teleportiert!` }, "other");
 });
 
 bot.on("chat", async (username, message) => {
@@ -176,19 +177,16 @@ bot.on("chat", async (username, message) => {
     // @ts-ignore
     bot.pathfinder.setGoal(null);
   }
-
-  if (username === bot.username) return;
-  await sendWebHook(username, message, "chat");
 });
 
 // @ts-ignore
 bot.on("moneyDrop", async (username: string, amount: number) => {
-  await sendWebHook("MoneyDrop", `Es gab einen Moneydrop von ${amount}!`, "moneyDrops");
+  await sendWebHook({ username: "MoneyDrop", message: `Es gab einen Moneydrop von ${amount}!` }, "moneyDrops");
 });
 
 // @ts-ignore
 bot.on("msg", async (rank: string, username: string, message: string) => {
-  await sendWebHook(username, message, "msg");
+  await sendWebHook({username, message, rank}, "msg");
 
   if (!whitelist.includes(username) || !message.startsWith("!")) return;
 
