@@ -8,6 +8,7 @@ export const config = {
     portalCooldown: 12000,
 
     // RegEx used to add chat patterns
+    playerChatRegex: /^\[([^\]]*)\]\s(\w+)\s+┃\s+(\w+)\s+»\s+(.*)$/,
     msgRegex: /^\[(\w+) \u2503 (\u007E?\u0021?\w{1,16}) -> mir\] (.+)$/,
     plotChatRegex: /^\[Plot\-Chat\]\[(.+)\] (\w+) \u2503 (\u007E?\u0021?\w{1,16}) \: (.+)$/,
     chatmodeAlertRegex: /^\[Chat\] Der Chat wurde von (\w+) \u2503 (\u007E?\u0021?\w{1,16}) (.+)\.$/,

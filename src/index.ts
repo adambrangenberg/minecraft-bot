@@ -37,6 +37,7 @@ const defaultMove = new pathfinder.Movements(bot, mcData);
 const Recipe = prismarineRecipe(bot.version).Recipe;
 
 // Adding Events
+bot.chatAddPattern(config.playerChatRegex, "playerChat")
 bot.chatAddPattern(config.msgRegex, "msg");
 bot.chatAddPattern(config.plotChatRegex, "plotChat");
 bot.chatAddPattern(config.chatmodeAlertRegex, "chatmodeAlert");
@@ -70,6 +71,10 @@ bot.once("spawn", async () => {
   console.log("Im Portal angekommen! :D");
 });
 
+// @ts-ignore
+bot.on("playerChat", (clan: string, rank: string , username: string, message: string) => {
+
+})
 
 bot.on("kicked", async (reason) => {
   // Will be fixed soon, at the moment it's just ending the bot
