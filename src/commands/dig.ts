@@ -8,6 +8,12 @@ export const command: Command = {
     args: 1,
 
     async run(rank, username, args, bot) {
+        if (args[0] === "stop") {
+            // @ts-ignore
+            bot.emit("stopDig");
+            return
+        }
+
         // other to collect that doesn't include pathfinding --> the bot stands still
         let loopCollect: boolean = true;
 

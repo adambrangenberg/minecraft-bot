@@ -15,18 +15,15 @@ It also has a web interface which allows you to lurk on the bot in either third 
 
 List of Commands:
 
-- !collect
-- !stopCollect
+- !collect (stop as first argument to stop)
 - !come
-- !craft
-- !stopCrafting
-- !dig
+- !craft (stop as first argument to stop)
+- !dig (stop as first argument to stop)
 - !stopDig
 - !drop
 - !sudo
 - !pay
-- !follow
-- !stopFollow
+- !follow (stop as first argument to stop)
 
 There is a known issue that some stop commands don't get recognized.
 

@@ -9,6 +9,12 @@ export const command: Command = {
   args: 0,
 
   async run(rank, username, args, bot) {
+    if (args[0] === "stop") {
+      // @ts-ignore
+      bot.emit("stopFollow");
+      return
+    }
+
     let follow = true;
     // @ts-ignore
     bot.once("stopFollow", () => {

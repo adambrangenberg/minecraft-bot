@@ -5,14 +5,14 @@ import { initStuff } from '../index';
 export const command: Command = {
     name: "collect",
     usage: "!collect <Blockname>",
-    args: 0,
+    args: 1,
 
     async run(rank, username, args, bot) {
         // Other do dig that includes pathfinding too
         // @ts-ignore
         bot.emit("stopCollect");
 
-        if (args.length < 1) {
+        if (args[0] === "stop") {
             return
         }
 

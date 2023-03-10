@@ -5,9 +5,15 @@ import { sendMSG } from "../functions";
 export const command: Command = {
     name: "craft",
     usage: "!craft <Item> <Resulting Amount> <Amount to craft>",
-    args: 2,
+    args: 1,
 
     run(rank, username, args, bot) {
+        if (args[0] === "stop") {
+            // @ts-ignore
+            bot.emit("stopCrafting");
+            return
+        }
+
         // Get the item to craft
         const item = initStuff.mcData.itemsByName[args[0].toLowerCase()];
         if (!item) {
