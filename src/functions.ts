@@ -79,7 +79,6 @@ export async function sendWebHook({ message, username, clan, rank }: MSGData, ch
         break;
       }
 
-
       hookID = process.env.CHAT_WEBHOOK;
       complete = true;
       break;
@@ -94,15 +93,20 @@ export async function sendWebHook({ message, username, clan, rank }: MSGData, ch
       break;
   }
   if (!hookID) return;
+  let hook
+  let hasClan
   try {
     // Getting the properties out of Minecraft API
     const hasRank = rank === undefined ? username : `${rank} ┃ ${username}`;
-    const hasClan = clan === undefined ? hasRank : `[${clan}] ` + hasRank
+    hasClan = clan === undefined ? hasRank : `[${clan}] ` + hasRank
     const head = await mcapi.head(username, 2000);
-    const hook = new Webhook(hookID, `${hasClan}`, head.helmavatar);
+    hook = new Webhook(hookID, `${hasClan}`, head.helmavatar);
     await hook.send(`\`${message}\``);
   } catch (error) {
-    console.log(error);
+    console.log("Failed to send WebHook message due to RateLimits.");
+    console.log("Username:", hook?.username)
+    console.log("Message:", hasClan)
+    console.log("")
   }
 }
 
