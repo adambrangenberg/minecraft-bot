@@ -45,11 +45,13 @@ export const command: Command = {
                 bot.collectBlock.collect(foundBlocks, error => {
 
                     // Loop the process
-                    if (error)
+                    if (error) {
                         console.log(error);
-                    else if (loopCollect) {
+                    } else if (loopCollect) {
                         collectBlock();
-                    } else sendMSG(username, "Stopped!");
+                    } else {
+                        sendMSG(username, "Stopped!");
+                    }
                 });
             }
         }
